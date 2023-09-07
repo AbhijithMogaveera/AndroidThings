@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidthings.databinding.ThingsViewHolderBinding
 
 class ThingsAdapter(
-    val things: List<Thing>
+    val things: List<Thing>,
+    val onClick: (Thing) -> Unit
 ) : RecyclerView.Adapter<ThingsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThingsViewHolder {
         return ThingsViewHolder(
@@ -23,6 +24,6 @@ class ThingsAdapter(
     }
 
     override fun onBindViewHolder(holder: ThingsViewHolder, position: Int) {
-        holder.bind(things[position].name)
+        holder.bind(things[position], onClick = onClick)
     }
 }

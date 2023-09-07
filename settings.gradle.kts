@@ -16,3 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "AndroidThings"
 include(":app")
 include(":notifications")
+include(":theme")
+include(":core")

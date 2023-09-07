@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".screens.NotificationSampleFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/simpleNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="SIMPLE NOTIFICATION" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/exapandabelNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="EXPANDABLE NOTIFICATION" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showMessagingNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="MESSAGING NOTIFICATION" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showProgressNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="PROGRESS NOTIFICATION" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showMediaNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="MEDIA NOTIFICATION" />
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
