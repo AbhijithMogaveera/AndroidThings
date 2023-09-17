@@ -11,15 +11,22 @@ data class Message(
 
 data class Group(
     val groupName: String,
-    val message: List<Message>,
     val id: Int
-)
+) {
+    var messages: List<Message> = emptyList(); private set
+    @Synchronized
+    fun addMessage(message: Message) {
+        messages = messages + message
+    }
+}
 
 val userFoo = User("UserFoo")
 val userBar = User("UserBar")
 val AndroidGroup = Group(
     groupName = "Android",
-    message = listOf(
+    id = 10
+).apply {
+    listOf(
         Message(
             message = "Hello Bar, welcome to android group",
             user = userFoo
@@ -28,12 +35,13 @@ val AndroidGroup = Group(
             message = "Hi foo!, thanks for having me",
             user = userBar
         )
-    ),
-    id = 10
-)
+    ).forEach(this::addMessage)
+}
 val IosGroup = Group(
     groupName = "IOS",
-    message = listOf(
+    id = 11
+).apply {
+    listOf(
         Message(
             message = "Hello foo, welcome to ios group",
             user = userBar
@@ -42,6 +50,7 @@ val IosGroup = Group(
             message = "Hi bar!, thanks for having me",
             user = userFoo
         )
-    ),
-    id = 11
-)
+    ).forEach(this::addMessage)
+}
+
+val allGroups = listOf(AndroidGroup, IosGroup)

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.Fragment
@@ -12,22 +13,24 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.media3.exoplayer.source.ShuffleOrder.DefaultShuffleOrder
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
 import com.example.notifications.data.songs.audios
-import com.example.notifications.notification.channels.NotificationChannels
 import kotlinx.coroutines.flow.*
 
 val Fragment.audioPlayerManager get() = AudioPlayerManager.getInstance(requireActivity().application)
 val Activity.audioPlayerManager get() = AudioPlayerManager.getInstance(application)
 val Context.audioPlayerManager get() = AudioPlayerManager.getInstance(this.applicationContext as Application)
+val Service.audioPlayerManager get() = AudioPlayerManager.getInstance(application)
+
 
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class AudioPlayerManager private constructor(
     val application: Application
 ) {
-
-    private var player: ExoPlayer = run {
+    var isInSufferMode = false
+    val player: ExoPlayer = run {
         ExoPlayer.Builder(application).build().also { player ->
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
@@ -39,27 +42,27 @@ class AudioPlayerManager private constructor(
     }
 
     init {
-        preparePlayList(
-            player = player,
-            onPrepared = { mediaSession, notificationManager ->
-            },
-            playerNotificationListener = PlayerNotificationListener()
-        )
+        preparePlayList(player = player)
+
     }
 
 
     fun updatePlayer(action: PlayerAction) {
         when (action) {
-            PlayerAction.Play -> if (player.isPlaying) {
-                player.playWhenReady = false
-                player.pause()
-            } else {
+            PlayerAction.Play ->  {
                 player.playWhenReady = true
                 player.play()
             }
-
             PlayerAction.Next -> player.seekToNextMediaItem()
-            PlayerAction.Rewind -> player.seekToPreviousMediaItem()
+            PlayerAction.Previous -> player.seekToPreviousMediaItem()
+            PlayerAction.Pause -> player.pause()
+            PlayerAction.Shuffle-> {
+                preparePlayList(player, true)
+            }
+
+            PlayerAction.NoShuffle -> {
+                preparePlayList(player, false)
+            }
         }
     }
 
@@ -80,11 +83,7 @@ class AudioPlayerManager private constructor(
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 private fun AudioPlayerManager.preparePlayList(
     player: ExoPlayer,
-    onPrepared: (
-        mediaSession: MediaSession,
-        manger: PlayerNotificationManager
-    ) -> Unit,
-    playerNotificationListener: PlayerNotificationManager.NotificationListener
+    shuffled:Boolean = false
 ) {
 
     val videoItems: ArrayList<MediaSource> = arrayListOf()
@@ -94,6 +93,7 @@ private fun AudioPlayerManager.preparePlayList(
             .setArtworkUri(Uri.parse(it.thumbUrl))
             .setTitle(it.title)
             .setAlbumArtist(it.artistName)
+            
             .build()
 
         val trackUri = Uri.parse(it.url)
@@ -112,25 +112,22 @@ private fun AudioPlayerManager.preparePlayList(
         )
     }
 
-    prepareNotification(
-        onPrepared = onPrepared,
-        playerNotificationListener = playerNotificationListener,
-        player = player
-    )
+
     player.playWhenReady = false
-    player.setMediaSources(videoItems)
+    player.setMediaSources(videoItems.let {
+        if(shuffled) it.shuffled() else it
+    })
     player.prepare()
 }
 
 
 @SuppressLint("UnsafeOptInUsageError")
-private fun AudioPlayerManager.prepareNotification(
+fun AudioPlayerManager.prepareM3Notification(
     onPrepared: (
         mediaSession: MediaSession,
         manager: PlayerNotificationManager
     ) -> Unit,
     playerNotificationListener: PlayerNotificationManager.NotificationListener,
-    player: ExoPlayer,
 ) {
     val sessionActivityPendingIntent =
         application.packageManager?.getLaunchIntentForPackage(application.packageName)
@@ -144,7 +141,8 @@ private fun AudioPlayerManager.prepareNotification(
             }
 
     val mediaSession: MediaSession =
-        MediaSession.Builder(application, player).setSessionActivity(sessionActivityPendingIntent!!)
+        MediaSession.Builder(application, player)
+            .setSessionActivity(sessionActivityPendingIntent!!)
             .build()
     application.createPlayerNotificationManager(
         mediaSession.token,

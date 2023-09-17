@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="light_tint">#33B5E5</color>
+    <color name="light_text">#000000</color>
+    <color name="dark_tint">#FF8800</color>
+    <color name="dark_text">#FFFFFF</color>
+</resources>

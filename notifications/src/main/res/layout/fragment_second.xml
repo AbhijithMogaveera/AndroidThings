@@ -37,11 +37,25 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/showMediaNotification"
+        android:id="@+id/showMedia3NotificationA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="MEDIA NOTIFICATION" />
+        android:text="MEDIA 3 NOTIFICATION (A)" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showMedia3NotificationB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="MEDIA 3 NOTIFICATION (B)" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showCustomPlayerNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="CUSTOM MEDIA NOTIFICATION with EXO" />
 
 
 

@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/image"
+        style="@style/ImageTintStyle"
+        android:layout_width="64dp"
+        android:contentDescription="@string/favourite"
+        android:layout_height="match_parent"
+        android:src="@drawable/baseline_favorite_24" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.Compat.Notification.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            tools:text="Testing" />
+
+        <TextView
+            android:id="@+id/text"
+            style="@style/TextAppearance.Compat.Notification.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            tools:text="Testing is awecome" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnSeekToPrevious"
+        style="@style/ImageTintStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/skip_to_previous"
+        android:src="@drawable/baseline_skip_previous_24"
+        tools:tint="@color/black" />
+
+    <ImageView
+        android:id="@+id/btnPlayPause"
+        style="@style/ImageTintStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/play_song"
+        android:src="@drawable/ic_play" />
+
+    <ImageView
+        android:id="@+id/btnSeekToNext"
+        style="@style/ImageTintStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/skip_to_next"
+        android:src="@drawable/baseline_skip_next_24" />
+</LinearLayout>

@@ -44,4 +44,8 @@
     </string>
     <string name="post_notification">Post notification</string>
     <string name="media_notification_channel">media notification</string>
+    <string name="play_song">play song</string>
+    <string name="skip_to_next">skip to next</string>
+    <string name="skip_to_previous">skip to previous</string>
+    <string name="favourite">favourite</string>
 </resources>
