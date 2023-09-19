@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,8 @@ import com.example.notifications.notification.util.showProcessNotification
 import com.example.notifications.notification.util.showSimpleNotification
 import com.example.notifications.services.MediaPlayerNotificationService
 import com.example.notifications.services.PlaybackService
+
+var isPlaybackServiceIsActive = false
 
 
 class NotificationSampleFragment : Fragment() {
@@ -71,11 +72,10 @@ class NotificationSampleFragment : Fragment() {
                 )
             }
         }
-        var isCustomPlayerMedia3ServiceStarted = false
         binding.showMedia3NotificationB.setOnClickListener {
-            if(isCustomPlayerMedia3ServiceStarted)
+            if(isPlaybackServiceIsActive)
                 return@setOnClickListener
-            isCustomPlayerMedia3ServiceStarted = true
+            isPlaybackServiceIsActive = true
             val sessionToken = SessionToken(
                 requireContext().applicationContext,
                 ComponentName(requireContext().applicationContext, PlaybackService::class.java)
