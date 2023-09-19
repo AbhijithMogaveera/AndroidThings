@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.CommandButton
@@ -29,14 +28,14 @@ class MediaNotificationProvider(
 
         val shuffleOnCommandButton = CommandButton
             .Builder()
-            .setSessionCommand(SessionCommand(PlaybackService.ShuffleActions.CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_ON.name, Bundle()))
+            .setSessionCommand(SessionCommand(PlaybackService.ShuffleActions.SHUFFLE_MODE_ON.name, Bundle()))
             .setIconResId(R.drawable.baseline_shuffle_24)
             .setEnabled(true)
             .setDisplayName("shuffle on")
             .build()
 
         val shuffleOffCommandButton = CommandButton.Builder().setSessionCommand(
-            SessionCommand(PlaybackService.ShuffleActions.CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_OFF.name, Bundle()))
+            SessionCommand(PlaybackService.ShuffleActions.SHUFFLE_MODE_OFF.name, Bundle()))
             .setIconResId(R.drawable.baseline_shuffle_on_24)
             .setEnabled(true)
             .setDisplayName("shuffle off")

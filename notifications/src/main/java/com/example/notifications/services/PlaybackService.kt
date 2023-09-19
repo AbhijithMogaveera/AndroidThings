@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.media3.common.Player
 import androidx.media3.common.util.BitmapLoader
 import androidx.media3.session.CommandButton
@@ -30,23 +29,21 @@ class PlaybackService : MediaSessionService(), MediaSession.Callback, BitmapLoad
     private var commandButtons = listOf<CommandButton>()
 
     private var customCommands = listOf(
-        CommandButton.Builder().setSessionCommand(
-            SessionCommand(ShuffleActions.CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_ON.name, Bundle())
-        )
+        CommandButton.Builder()
+            .setSessionCommand(
+            SessionCommand(ShuffleActions.SHUFFLE_MODE_ON.name, Bundle()))
             .setIconResId(R.drawable.baseline_shuffle_24)
             .setEnabled(true)
             .setDisplayName("shuffle on")
             .build(),
-        CommandButton.Builder().setSessionCommand(
-            SessionCommand(ShuffleActions.CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_OFF.name, Bundle())
-        )
+        CommandButton.Builder()
+            .setSessionCommand(SessionCommand(ShuffleActions.SHUFFLE_MODE_OFF.name, Bundle()))
             .setIconResId(R.drawable.baseline_shuffle_on_24)
             .setEnabled(true)
             .setDisplayName("shuffle off")
             .build(),
-        CommandButton.Builder().setSessionCommand(
-            SessionCommand("action_close", Bundle())
-        )
+        CommandButton.Builder()
+            .setSessionCommand(SessionCommand("action_close", Bundle()))
             .setIconResId(R.drawable.baseline_close_24)
             .setEnabled(true)
             .setDisplayName("close")
@@ -54,8 +51,8 @@ class PlaybackService : MediaSessionService(), MediaSession.Callback, BitmapLoad
     )
 
     enum class ShuffleActions {
-        CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_ON,
-        CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_OFF
+        SHUFFLE_MODE_ON,
+        SHUFFLE_MODE_OFF
     }
 
     override fun onUpdateNotification(session: MediaSession, startInForegroundRequired: Boolean) {
@@ -96,7 +93,6 @@ class PlaybackService : MediaSessionService(), MediaSession.Callback, BitmapLoad
         val connectionResult = super.onConnect(session, controller)
         val availableSessionCommands = connectionResult.availableSessionCommands.buildUpon()
         customCommands.forEach { commandButton ->
-            // Add custom command to available session commands.
             commandButton.sessionCommand?.let { availableSessionCommands.add(it) }
         }
         return MediaSession.ConnectionResult.accept(
@@ -111,16 +107,20 @@ class PlaybackService : MediaSessionService(), MediaSession.Callback, BitmapLoad
         customCommand: SessionCommand,
         args: Bundle
     ): ListenableFuture<SessionResult> {
-        if (ShuffleActions.CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_ON.name == customCommand.customAction) {
-            commandButtons = listOf(customCommands[1], customCommands[2])
-            session.setCustomLayout(commandButtons)
-            audioPlayerManager.updatePlayer(PlayerAction.Shuffle)
-        } else if (ShuffleActions.CUSTOM_COMMAND_TOGGLE_SHUFFLE_MODE_OFF.name == customCommand.customAction) {
-            commandButtons = listOf(customCommands[0], customCommands[2])
-            session.setCustomLayout(commandButtons)
-            audioPlayerManager.updatePlayer(PlayerAction.NoShuffle)
-        } else if (customCommand.customAction == "action_close") {
-            stopService()
+        when {
+            ShuffleActions.SHUFFLE_MODE_ON.name == customCommand.customAction -> {
+                commandButtons = listOf(customCommands[1], customCommands[2])
+                session.setCustomLayout(commandButtons)
+                audioPlayerManager.updatePlayer(PlayerAction.Shuffle)
+            }
+            ShuffleActions.SHUFFLE_MODE_OFF.name == customCommand.customAction -> {
+                commandButtons = listOf(customCommands[0], customCommands[2])
+                session.setCustomLayout(commandButtons)
+                audioPlayerManager.updatePlayer(PlayerAction.NoShuffle)
+            }
+            customCommand.customAction == "action_close" -> {
+                stopService()
+            }
         }
         return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
     }
