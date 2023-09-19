@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.notifications.NotificationActivityViewModel
+import com.example.notifications.viewmodel.NotificationActivityViewModel
 import com.example.notifications.databinding.NotificationPermissionFragmentBinding
 
 class MissingNotificationFragment : Fragment() {

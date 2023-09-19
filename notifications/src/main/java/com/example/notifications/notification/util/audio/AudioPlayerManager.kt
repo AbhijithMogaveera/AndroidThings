@@ -13,7 +13,6 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.exoplayer.source.ShuffleOrder.DefaultShuffleOrder
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
 import com.example.notifications.data.songs.audios
@@ -29,6 +28,9 @@ val Service.audioPlayerManager get() = AudioPlayerManager.getInstance(applicatio
 class AudioPlayerManager private constructor(
     val application: Application
 ) {
+
+    var isSessionActive = false
+
     var isInSufferMode = false
     val player: ExoPlayer = run {
         ExoPlayer.Builder(application).build().also { player ->
@@ -120,7 +122,6 @@ private fun AudioPlayerManager.preparePlayList(
     player.prepare()
 }
 
-
 @SuppressLint("UnsafeOptInUsageError")
 fun AudioPlayerManager.prepareM3Notification(
     onPrepared: (
@@ -144,6 +145,7 @@ fun AudioPlayerManager.prepareM3Notification(
         MediaSession.Builder(application, player)
             .setSessionActivity(sessionActivityPendingIntent!!)
             .build()
+    isSessionActive = true
     application.createPlayerNotificationManager(
         mediaSession.token,
         player,

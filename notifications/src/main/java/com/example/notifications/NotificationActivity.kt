@@ -1,6 +1,5 @@
 package com.example.notifications
 
-import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -8,31 +7,17 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.notifications.databinding.ActivityNotificationBinding
 import com.example.notifications.screens.MissingNotificationFragment
 import com.example.notifications.screens.NotificationSampleFragment
 import com.example.notifications.services.MediaPlayerNotificationService
+import com.example.notifications.viewmodel.NotificationActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 
-
-class NotificationActivityViewModel() : ViewModel() {
-
-    @RequiresApi(Build.VERSION_CODES.P)
-    val permissionP = arrayOf(Manifest.permission.FOREGROUND_SERVICE)
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    val permissionsTIRAMISU = arrayOf(Manifest.permission.POST_NOTIFICATIONS) + permissionP
-
-    val requestCode = 100
-
-}
 
 class NotificationActivity : AppCompatActivity() {
 
@@ -74,7 +59,6 @@ class NotificationActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val granted = isAllPermissionGrantedForTIRAMISU()
             if (!granted) {
-                Toast.makeText(this, "A", Toast.LENGTH_SHORT).show()
                 onPermissionNotGranted()
                 return
             }
@@ -83,7 +67,6 @@ class NotificationActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val granted = isAllPermissionGrantedForP()
             if (!granted) {
-                Toast.makeText(this, "B", Toast.LENGTH_SHORT).show()
                 onPermissionNotGranted()
                 return
             }

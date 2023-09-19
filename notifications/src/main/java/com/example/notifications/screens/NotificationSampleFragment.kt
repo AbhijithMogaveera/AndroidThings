@@ -63,11 +63,13 @@ class NotificationSampleFragment : Fragment() {
 
         binding.showMedia3NotificationA.setOnClickListener {
             audioPlayerManager.updatePlayer(PlayerAction.Play)
-            audioPlayerManager.prepareM3Notification(
-                onPrepared = { mediaSession, notificationManager ->
-                },
-                playerNotificationListener = PlayerNotificationListener(),
-            )
+            if(!audioPlayerManager.isSessionActive) {
+                audioPlayerManager.prepareM3Notification(
+                    onPrepared = { mediaSession, notificationManager ->
+                    },
+                    playerNotificationListener = PlayerNotificationListener(),
+                )
+            }
         }
         var isCustomPlayerMedia3ServiceStarted = false
         binding.showMedia3NotificationB.setOnClickListener {
